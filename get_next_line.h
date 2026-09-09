@@ -6,7 +6,7 @@
 /*   By: obdintal <obdintal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 12:28:24 by obdintal          #+#    #+#             */
-/*   Updated: 2026/09/05 16:12:36 by obdintal         ###   ########.fr       */
+/*   Updated: 2026/09/09 16:17:56 by obdintal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4096
+#  define BUFFER_SIZE 256
 # endif
 
 # include <fcntl.h>
@@ -23,5 +23,7 @@
 
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *s);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strjoin(char *s1, char const *s2);
 
 #endif

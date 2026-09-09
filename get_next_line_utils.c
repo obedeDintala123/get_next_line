@@ -6,13 +6,13 @@
 /*   By: obdintal <obdintal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 12:28:30 by obdintal          #+#    #+#             */
-/*   Updated: 2026/09/05 16:01:01 by obdintal         ###   ########.fr       */
+/*   Updated: 2026/09/09 16:17:29 by obdintal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static size_t	ft_strlen(const char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
@@ -24,7 +24,7 @@ static size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-static size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	src_len;
 	size_t	i;
@@ -57,4 +57,48 @@ char	*ft_strdup(const char *s)
 		return (NULL);
 	ft_strlcpy(dst, s, len + 1);
 	return (dst);
+}
+
+char	*ft_strjoin(char *s1, char const *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*result;
+
+	if (!s1)
+		s1 = ft_strdup("");
+	if (!s2)
+		return (NULL);
+	i = 0;
+	j = 0;
+	result = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!result)
+	{
+		free(s1);
+		return (NULL);
+	}
+	while (s1[j])
+		result[i++] = s1[j++];
+	j = 0;
+	while (s2[j])
+		result[i++] = s2[j++];
+	result[i] = '\0';
+	free(s1);
+	return (result);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (s[i] != (char)c)
+	{
+		if (s[i] == '\0')
+			return (NULL);
+		i++;
+	}
+	return ((char *)&s[i]);
 }
