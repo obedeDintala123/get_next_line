@@ -6,7 +6,7 @@
 /*   By: obdintal <obdintal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/05 12:28:27 by obdintal          #+#    #+#             */
-/*   Updated: 2026/09/09 16:20:24 by obdintal         ###   ########.fr       */
+/*   Updated: 2026/09/16 15:46:54 by obdintal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static	void	update_saved(char **saved)
 	char	*new_content;
 
 	pos = ft_strchr(*saved, '\n');
-	if (pos)
+	if (pos && *(pos + 1))
 		new_content = ft_strdup(pos + 1);
 	else
 		new_content = NULL;
@@ -53,11 +53,13 @@ static	char	*read_line(char **saved, size_t size)
 	return (line);
 }
 
-static char	*get_line(char **saved)
+static char	*get_line(char **saved, char **buffer)
 {
 	char	*line;
 	size_t	count;
 
+	free(*buffer);
+	*buffer = NULL;
 	if (!*saved || (*saved)[0] == '\0')
 	{
 		free(*saved);
@@ -74,16 +76,36 @@ static char	*get_line(char **saved)
 	return (line);
 }
 
+static int	get_alloc(char **saved, char **buffer)
+{
+	*buffer = NULL;
+	if (!(*saved))
+		(*saved) = ft_strdup("");
+	if (!(*saved))
+		return (1);
+	if (!*buffer)
+	{
+		*buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!*buffer)
+		{
+			free((*saved));
+			(*saved) = NULL;
+			return (1);
+		}
+	}
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
 	ssize_t		bytes_read;
-	char		buffer[BUFFER_SIZE + 1];
+	char		*buffer;
 	static char	*saved;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!saved)
-		saved = ft_strdup("");
+	if (get_alloc(&saved, &buffer))
+		return (NULL);
 	while (!ft_strchr(saved, '\n'))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -100,5 +122,5 @@ char	*get_next_line(int fd)
 		if (!saved)
 			return (NULL);
 	}
-	return (get_line(&saved));
+	return (get_line(&saved, &buffer));
 }
